@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const Razorpay = require("razorpay");
+const fs = require('fs'); 
+
 
 const app = express();
 const SECRET_KEY = 'wordaura_secret';
@@ -15,7 +17,10 @@ const razorpay = new Razorpay({
   key_secret: "ppM7JhyVpBtycmMcFGxYdacw",
 });
 
-app.use(cors());
+app.use(cors({
+  origin:'*',
+  Credentials:true
+}));
 app.use(express.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
@@ -411,6 +416,27 @@ app.post('/api/create-order', async (req, res) => {
   }
 });
 
+// 🔥 Route to convert image file to base64 and send to frontend
+app.get('/api/image-base64/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const imagePath = path.join(__dirname, 'images', filename); // images folder inside backend
+
+  try {
+    // Check if image file exists
+    if (!fs.existsSync(imagePath)) {
+      return res.status(404).json({ error: 'Image not found' });
+    }
+
+    const ext = path.extname(filename).slice(1); // jpg, png etc
+    const base64 = fs.readFileSync(imagePath, { encoding: 'base64' });
+
+    res.json({
+      image: `data:image/${ext};base64,${base64}` // send base64 with correct MIME type
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to convert image', details: err.message });
+  }
+});
 
 /* ---------- START SERVER ---------- */
 const PORT = 5000;
