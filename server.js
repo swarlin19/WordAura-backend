@@ -243,9 +243,9 @@ app.post('/api/save-order', async (req, res) => {
   } = req.body;
 
   const conn = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'RYSF@rysf123',
+    host: 'database-1.cr2ue6u44sny.eu-north-1.rds.amazonaws.com',
+    user: 'admin',
+    password: 'ramchin123',
     database: 'bookstore',
   });
 
@@ -441,5 +441,5 @@ app.get('/api/image-base64/:filename', (req, res) => {
 /* ---------- START SERVER ---------- */
 const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://13.60.49.86:${PORT}`);
 });
