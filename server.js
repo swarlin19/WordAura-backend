@@ -19,6 +19,7 @@ const razorpay = new Razorpay({
 
 app.use(cors({
   origin:'*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   Credentials:true
 }));
 app.use(express.json());
@@ -440,6 +441,6 @@ app.get('/api/image-base64/:filename', (req, res) => {
 
 /* ---------- START SERVER ---------- */
 const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://13.60.49.86:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on all interfaces at port ${PORT}`);
 });
