@@ -16,6 +16,8 @@ const razorpay = new Razorpay({
   key_id: "rzp_test_EH1UEwLILEPXCj",
   key_secret: "ppM7JhyVpBtycmMcFGxYdacw",
 });
+ 
+require('dotenv').config();
 
 app.use(cors({
   origin:'*',
@@ -26,23 +28,14 @@ app.use(express.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // MySQL Connection
-let db;
-const connectDB = async () => {
-  try {
-    db = await mysql.createConnection({
-      host: 'database-1.cr2ue6u44sny.eu-north-1.rds.amazonaws.com',
-      user: 'admin',
-      password: 'ramchin123',
-      database: 'bookstore',
-    });
-    console.log('✅ Connected to MySQL (bookstore)');
-  } catch (err) {
-    console.error('❌ MySQL Connection Error:', err);
-  }
-};
-connectDB();
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
+});
 
-
+module.exports = db;
 /* ---------- AUTH ROUTES ---------- */
 app.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
