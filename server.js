@@ -42,6 +42,7 @@ const connectDB = async () => {
 };
 connectDB();
 
+
 /* ---------- AUTH ROUTES ---------- */
 app.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
